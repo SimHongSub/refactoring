@@ -25,6 +25,11 @@ invoices = [
 ];
 
 function statement(invoice, plays){
+    return renderPlainText(invoice, plays);
+}
+
+// statement 단계를 쪼개기 위한 함수화
+function renderPlainText(invoice, plays){
     let result = `청구 내역 (고객명: ${invoice.customer})\n`;
 
     for(let perf of invoice.performances){
