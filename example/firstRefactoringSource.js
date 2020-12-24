@@ -86,24 +86,12 @@ function statement(invoice, plays){
 
     // volumeCredits 누적 계산 함수화
     function totalVolumeCredits(data){
-        let result = 0;
-
-        for(let perf of data.performances) {
-            result += perf.volumeCredits;
-        }
-
-        return result;
+        return data.performances.reduce((total, aPerformance) => total + aPerformance.volumeCredits, 0);
     }
 
     // totalAmount 계산 함수화
     function totalAmount(data){
-        let result = 0;
-
-        for(let perf of data.performances){
-            result += perf.amount;
-        }
-
-        return result;
+        return data.performances.reduce((total, aPerformance) => total + aPerformance.totalAmount, 0);
     }
 }
 
