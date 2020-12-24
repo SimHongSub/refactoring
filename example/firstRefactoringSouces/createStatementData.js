@@ -1,37 +1,12 @@
-plays = {
-    "hamlet": {"name":  "Hamlet", "type":  "tragedy"},
-    "as-like": {"name":  "As You Like It", "type":  "comedy"},
-    "othello": {"name":  "Othello", "type":  "tragedy"}
-};
-
-invoices = [
-    {
-        "customer": "BigCo",
-        "performances": [
-            {
-                "playID": "hamlet",
-                "audience": 55
-            },
-            {
-                "playID": "as-like",
-                "audience": 35
-            },
-            {
-                "playID": "othello",
-                "audience": 40
-            }
-        ]
-    }
-];
-
-function statement(invoice, plays){
+// statementdata 생성 함수화
+export default function createStatementData(invoice, plays){
     const statementData = {};
     statementData.customer = invoice.customer;
     statementData.performances = invoice.performances.map(enrichPerformance);
     statementData.totalvolumeCredits = totalVolumeCredits(statementData);
     statementData.totalAmount = totalAmount(statementData);
 
-    return renderPlainText(statementData, plays);
+    return statementData;
 
     // 새로운 중간 데이터 형태를 만들기 위한 함수
     function enrichPerformance(aPerformance){
@@ -94,26 +69,3 @@ function statement(invoice, plays){
         return data.performances.reduce((total, aPerformance) => total + aPerformance.totalAmount, 0);
     }
 }
-
-// statement 단계를 쪼개기 위한 함수화
-function renderPlainText(data, plays){
-    let result = `청구 내역 (고객명: ${data.customer})\n`;
-
-    for(let perf of data.performances){
-        result += ` ${perf.play.name}: ${usd(perf.amount)} (${perf.audience}석)\n`;
-    }
-
-    result += `총액: ${usd(data.totalAmount)}\n`;
-    result += `적립 포인트: ${data.totalvolumeCredits}점\n`;
-
-    return result;
-
-    // format 함수화
-    function usd(aNumber){
-        return new Intl.NumberFormat("en-US", {
-            style: "currency", currency: "USD", minimumFractionDigits: 2
-        }).format(aNumber/100);
-    }
-}
-
-console.log(statement(invoices[0], plays));
