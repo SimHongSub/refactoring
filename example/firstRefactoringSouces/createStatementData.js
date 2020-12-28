@@ -52,9 +52,14 @@ export default function createStatementData(invoice, plays){
 
     return statementData;
 
+    // 다형성을 지원하기 위한 팩터리 함수
+    function createPerformanceCalculator(aPerformance, aPlay) {
+        return new PerformanceCalculator(aPerformance, aPlay);
+    }
+
     // 새로운 중간 데이터 형태를 만들기 위한 함수
     function enrichPerformance(aPerformance){
-        const calculator = new PerformanceCalculator(aPerformance, playFor(aPerformance));
+        const calculator = createPerformanceCalculator(aPerformance, playFor(aPerformance));
         const result = Object.assign({}, aPerformance);
         result.play = calculator.play;
         result.amount = calculator.amount;
