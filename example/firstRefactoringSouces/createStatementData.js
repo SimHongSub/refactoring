@@ -12,13 +12,8 @@ class PerformanceCalculator {
 
     // volumeCredits 계산 함수화
     get volumeCredits(){
-        let result = 0;
-        result += Math.max(this.performance.audience - 30, 0);
 
-        if("comedy" === this.play.type)
-            result += Math.floor(this.performance.audience / 5);
-
-        return result;
+        return Math.max(this.performance.audience - 30, 0);
     }
 }
 
@@ -46,6 +41,10 @@ class ComedyCalculator extends PerformanceCalculator {
         result += 300 * this.performance.audience;
 
         return result;
+    }
+
+    get volumeCredits(){
+        return super.volumeCredits + Math.floor(this.performance.audience / 5);
     }
 }
 
@@ -83,17 +82,6 @@ export default function createStatementData(invoice, plays){
     // play 변수 함수
     function playFor(aPerformance){
         return plays[aPerformance.playID];
-    }
-
-    // volumeCredits 계산 함수화
-    function volumeCreditsFor(aPerformance){
-        let result = 0;
-        result += Math.max(aPerformance.audience - 30, 0);
-
-        if("comedy" === aPerformance.play.type)
-            result += Math.floor(aPerformance.audience / 5);
-
-        return result;
     }
 
     // volumeCredits 누적 계산 함수화
