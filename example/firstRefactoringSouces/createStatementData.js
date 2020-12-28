@@ -48,6 +48,16 @@ class ComedyCalculator extends PerformanceCalculator {
     }
 }
 
+// 다형성을 지원하기 위한 팩토리 함수
+function createPerformanceCalculator(aPerformance, aPlay) {
+    switch (aPlay.type){
+        case "tragedy" : return new TragedyCalculator(aPerformance, aPlay);
+        case "comedy" : return new ComedyCalculator(aPerformance, aPlay);
+        default:
+            throw new Error(`알 수 없는 장르: ${aPlay.type}`);
+    }
+}
+
 // statementdata 생성 함수화
 export default function createStatementData(invoice, plays){
     const statementData = {};
@@ -57,16 +67,6 @@ export default function createStatementData(invoice, plays){
     statementData.totalAmount = totalAmount(statementData);
 
     return statementData;
-
-    // 다형성을 지원하기 위한 팩리 함수
-    function createPerformanceCalculator(aPerformance, aPlay) {
-        switch (aPlay.type){
-            case "tragedy" : return new TragedyCalculator(aPerformance, aPlay);
-            case "comedy" : return new ComedyCalculator(aPerformance, aPlay);
-            default:
-                throw new Error(`알 수 없는 장르: ${aPlay.type}`);
-        }
-    }
 
     // 새로운 중간 데이터 형태를 만들기 위한 함수
     function enrichPerformance(aPerformance){
@@ -91,6 +91,6 @@ export default function createStatementData(invoice, plays){
 
     // totalAmount 계산 함수화
     function totalAmount(data){
-        return data.performances.reduce((total, aPerformance) => total + aPerformance.totalAmount, 0);
+        return data.performances.reduce((total, aPerformance) => total + aPerformance.amount, 0);
     }
 }
