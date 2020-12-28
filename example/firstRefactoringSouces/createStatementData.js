@@ -11,11 +11,7 @@ class PerformanceCalculator {
 
         switch (this.play.type){
             case "tragedy":
-                result = 40000;
-                if(this.performance.audience > 30){
-                    result += 1000 * (this.performance.audience - 30);
-                }
-                break;
+                throw '오류 발생';
             case "comedy":
                 result = 30000;
                 if(this.performance.audience > 20){
@@ -42,6 +38,24 @@ class PerformanceCalculator {
     }
 }
 
+// tragedy 공연료 계산기 클래스
+class TragedyCalculator extends PerformanceCalculator {
+
+    get amount(){
+        let result = 40000;
+        if(this.performance.audience > 30){
+            result += 1000 * (this.performance.audience - 30);
+        }
+
+        return result;
+    }
+}
+
+// comedy 공연료 계산기 클래스
+class ComedyCalculator extends PerformanceCalculator {
+
+}
+
 // statementdata 생성 함수화
 export default function createStatementData(invoice, plays){
     const statementData = {};
@@ -52,8 +66,14 @@ export default function createStatementData(invoice, plays){
 
     return statementData;
 
-    // 다형성을 지원하기 위한 팩터리 함수
+    // 다형성을 지원하기 위한 팩리 함수
     function createPerformanceCalculator(aPerformance, aPlay) {
+        switch (aPlay.type){
+            case "tragedy" : return new TragedyCalculator(aPerformance, aPlay);
+            case "comedy" : return new ComedyCalculator(aPerformance, aPlay);
+            default:
+                throw new Error(`알 수 없는 장르: ${aPlay.type}`);
+        }
         return new PerformanceCalculator(aPerformance, aPlay);
     }
 
