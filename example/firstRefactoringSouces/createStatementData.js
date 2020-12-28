@@ -7,23 +7,7 @@ class PerformanceCalculator {
 
     // switch문 함수화
     get amount(){
-        let result = 0;
-
-        switch (this.play.type){
-            case "tragedy":
-                throw '오류 발생';
-            case "comedy":
-                result = 30000;
-                if(this.performance.audience > 20){
-                    result += 10000 + 500 * (this.performance.audience - 20);
-                }
-                result += 300 * this.performance.audience;
-                break;
-            default:
-                throw new Error(`알 수 없는 장르: ${this.play.type}`);
-        }
-
-        return result;
+        throw Error('서브클래스에서 처리하도록 설계되었습니다.');
     }
 
     // volumeCredits 계산 함수화
@@ -54,6 +38,15 @@ class TragedyCalculator extends PerformanceCalculator {
 // comedy 공연료 계산기 클래스
 class ComedyCalculator extends PerformanceCalculator {
 
+    get amount(){
+        let result = 30000;
+        if(this.performance.audience > 20){
+            result += 10000 + 500 * (this.performance.audience - 20);
+        }
+        result += 300 * this.performance.audience;
+
+        return result;
+    }
 }
 
 // statementdata 생성 함수화
@@ -74,7 +67,6 @@ export default function createStatementData(invoice, plays){
             default:
                 throw new Error(`알 수 없는 장르: ${aPlay.type}`);
         }
-        return new PerformanceCalculator(aPerformance, aPlay);
     }
 
     // 새로운 중간 데이터 형태를 만들기 위한 함수
