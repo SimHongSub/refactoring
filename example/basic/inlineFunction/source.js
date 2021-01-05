@@ -12,7 +12,7 @@ function reportLines(aCustomer){
     return lines;
 }
 
-function getherCustomerData(lines, aCustomer){
+function getherCustomerData(out, aCustomer){
     out.push(["name", aCustomer.name]);
     out.push(["location", aCustomer.location]);
 }
