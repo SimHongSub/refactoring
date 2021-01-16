@@ -25,22 +25,14 @@ class Reading{
     get baseCharge(){
         return baseRate(this.month, this.year) * this.quantity;
     }
-}
 
-// 클라이언트 1
-const aReading = acquireReading();
-const baseCharge = baseRate(aReading.month, aReading.year) * aReading.quantity;
-
-// 클라이언트 2
-const aReading = acquireReading();
-const base = (baseRate(aReading.month, aReading.year) * aReading.quantity);
-const taxableCharge = taxableChargeFn(aReading);
-
-function taxableChargeFn(aReading){
-    return Math.max(0, base - taxThreshold(aReading.year));
+    get taxableCharge(){
+        return Math.max(0, this.baseCharge - taxThreshold(this.year));
+    }
 }
 
 // 클라이언트 3
 const rawReading = acquireReading();
 const aReading = new Reading(rawReading);
 const basicCharge = aReading.baseCharge;
+const taxableCharge = aReading.taxableCharge;
